@@ -56,7 +56,15 @@ namespace Repository.ImportData.SeedingData
 						}
 					}
 					// Todo: Create exception class 
-					catch (Exception e) { }
+					catch (Exception e)
+                    {
+                        throw new DataImportException()
+                        {
+                            Year = year,
+                            Context = csvReader.Context,
+                            ThrownException = e
+                        };
+                    }
 				}
 			}
 		}
