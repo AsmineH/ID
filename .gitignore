@@ -1,4 +1,4 @@
-﻿################################################################################
+################################################################################
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
@@ -14,3 +14,5 @@
 /Repository/obj/Debug
 /Tests/bin/Debug
 /Tests/obj/Debug
+/Tests.IntegrationTests/bin/Debug
+/Tests.IntegrationTests/obj/Debug

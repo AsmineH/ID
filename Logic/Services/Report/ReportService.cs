@@ -85,15 +85,18 @@ namespace Logic.Services.Report
 
 			if (stateId != -1)
 			{
+                decimal stateMedian = db.States.Where(s => s.StateId == stateId).FirstOrDefault()?.Median ?? 0m;
 				var data2011 = db.Scores
 					.Where(p => p.Year == 2011
-						&& p.Location.State.StateId == stateId)
+						&& p.Location.State.StateId == stateId
+                        && p.DisadvantageScore > stateMedian)
 					.Select(p => new { p.Location.LocationId, p.DisadvantageScore })
 					.ToList();
 				var data2016 = db.Scores
 					.Where(p => p.Year == 2016
-						&& p.Location.State.StateId == stateId)
-					.Select(p => new { p.Location.LocationId, p.DisadvantageScore })
+						&& p.Location.State.StateId == stateId
+                        && p.DisadvantageScore > stateMedian)
+                    .Select(p => new { p.Location.LocationId, p.DisadvantageScore })
 					.ToList();
 				var both = data2011.Join(
 					data2016,
