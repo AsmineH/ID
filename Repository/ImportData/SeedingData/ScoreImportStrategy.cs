@@ -1,6 +1,5 @@
 ﻿using CsvHelper;
 using Data.ViewModel;
-using Logic.Extensions;
 using Repository.ImportData.Extensions;
 using System;
 using System.Collections.Generic;
