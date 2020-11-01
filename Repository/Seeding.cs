@@ -50,7 +50,9 @@ namespace Repository
 
 			IScoreImportStrategy strategy = new ScoreDetailImportStrategy();
 			Stream stream = GetStream(resourceName);
-		}
+
+            strategy.SeedToContext(stream, context, 2016);
+        }
 
 		private void SeedSEIFA_2011(SeedingContext context)
 		{
@@ -59,7 +61,7 @@ namespace Repository
 			IScoreImportStrategy strategy = new ScoreImportStrategy();
 			Stream stream = GetStream(resourceName);
 
-			strategy.SeedToContext(stream, context);
+			strategy.SeedToContext(stream, context, 2011);
 		}
 
 		private Stream GetStream(string resourceName)

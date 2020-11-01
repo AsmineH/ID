@@ -10,7 +10,7 @@ namespace Repository.ImportData.SeedingData
 {
 	public class ScoreDetailImportStrategy : IScoreImportStrategy
 	{
-		public void SeedToContext(Stream stream, SeedingContext context)
+		public void SeedToContext(Stream stream, SeedingContext context, int year)
 		{
 			using (stream)
 			{
@@ -38,8 +38,7 @@ namespace Repository.ImportData.SeedingData
 								{
 									DisadvantageScore = disadvantage,
 									AdvantageDisadvantageScore = advantage,
-									//Todo: this should not be hard coded
-									Year = 2016,
+									Year = year,
 									Location = location
 								};
 
