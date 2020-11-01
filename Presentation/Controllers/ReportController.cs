@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace Presentation.Controllers
 {
-	public class ReportController : Controller
+	public class ReportController : BaseController
 	{
 		private readonly ReportService service = new ReportService();
 
@@ -21,13 +21,16 @@ namespace Presentation.Controllers
 				Selected = (p.StateName.Equals("Victoria", StringComparison.CurrentCultureIgnoreCase))
 			})
 			.ToList();
-			return View(service.GetDisadges(null));
+            ViewBag.ShowAllData = ShowAllData;
+            return View(service.GetDisadges(null, ShowAllData));
 		}
 
-		public ActionResult ReportGrid(string stateId)
-		{
-			int id = stateId != null ? int.Parse(stateId) : -1;
-			return PartialView(service.GetDisadges(id));
+		public ActionResult ReportGrid(string stateId, bool showAllData = false)
+        {
+            ShowAllData = showAllData;
+            ViewBag.ShowAllData = ShowAllData;
+            int id = stateId != null ? int.Parse(stateId) : -1;
+			return PartialView(service.GetDisadges(id, ShowAllData));
 		}
 	}
 }

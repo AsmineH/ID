@@ -2,6 +2,7 @@
 using Repository;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 
 namespace Logic.Services.Report
@@ -38,7 +39,7 @@ namespace Logic.Services.Report
 		}
 
 
-		public IEnumerable<DataModel> GetAllData(int? stateId)
+		public IEnumerable<DataModel> GetAllData(int? stateId, bool showAllData = false)
 		{
 			// Default state
 			if (!stateId.HasValue)
@@ -47,8 +48,8 @@ namespace Logic.Services.Report
 			}
 
 			var data =
-				db.Scores
-				.Where(p => p.Location.State.StateId == stateId)
+                 GetScoreData((int)stateId, showAllData)
+                .Where(p => p.Location.State.StateId == stateId)
 				.Join(db.Locations,
 				s => s.Location.LocationId,
 				l => l.LocationId,
@@ -75,7 +76,7 @@ namespace Logic.Services.Report
 			return data;
 		}
 
-		public IEnumerable<ReportModel> GetDisadges(int? stateId)
+		public IEnumerable<ReportModel> GetDisadges(int? stateId, bool showAllData = false)
 		{
 			// Default state
 			if (!stateId.HasValue)
@@ -85,17 +86,14 @@ namespace Logic.Services.Report
 
 			if (stateId != -1)
 			{
-                decimal stateMedian = db.States.Where(s => s.StateId == stateId).FirstOrDefault()?.Median ?? 0m;
-				var data2011 = db.Scores
-					.Where(p => p.Year == 2011
-						&& p.Location.State.StateId == stateId
-                        && p.DisadvantageScore > stateMedian)
+				var data2011 = GetScoreData((int)stateId, showAllData)
+                    .Where(p => p.Year == 2011
+						&& p.Location.State.StateId == stateId)
 					.Select(p => new { p.Location.LocationId, p.DisadvantageScore })
 					.ToList();
-				var data2016 = db.Scores
-					.Where(p => p.Year == 2016
-						&& p.Location.State.StateId == stateId
-                        && p.DisadvantageScore > stateMedian)
+				var data2016 = GetScoreData((int)stateId, showAllData)
+                    .Where(p => p.Year == 2016
+						&& p.Location.State.StateId == stateId)
                     .Select(p => new { p.Location.LocationId, p.DisadvantageScore })
 					.ToList();
 				var both = data2011.Join(
@@ -127,5 +125,16 @@ namespace Logic.Services.Report
 
 			return Enumerable.Empty<ReportModel>();
 		}
+
+        private IQueryable<Score> GetScoreData(int stateId, bool showAllData)
+        {
+            var scores = db.Scores.AsQueryable();
+            if (!showAllData)
+            {
+                var medianScore = db.States.Where(s => s.StateId == stateId).FirstOrDefault()?.Median ?? 0m;
+                scores = scores.Where(s => s.DisadvantageScore > medianScore);
+            }
+            return scores;
+        }
 	}
 }

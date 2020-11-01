@@ -2,32 +2,42 @@
 @model IEnumerable<ReportModel>
 @section Scripts
 {
-	<script>
-    $(function(){
-		$("#States_SelectedList").change(function(e){
-         var val=$(this).val();
-			$("#reportPartial").load("/Report/ReportGrid?stateId=" +val);
-       });
-    });
-	</script>
+    <script>
+        $(function () {
+            $("#States_SelectedList").change(function (e) {
+                var val = $(this).val();
+                $("#reportPartial").load("/Report/ReportGrid?stateId=" + val);
+            });
+            $("#Data_ShowingAllData").change(function (e) {
+                var state = $("#States_SelectedList").val();
+                var val = $(this)[0].checked;
+                $("#reportPartial").load("/Report/ReportGrid?stateId=" + state + "&showAllData=" + val);
+            });
+        });
+    </script>
 }
 
 @{
-	ViewBag.Title = "Report";
+    ViewBag.Title = "Report";
 }
 
 <h2>Report</h2>
 
 <div class="col-md-3"></div>
-<div class="row col-md-6">
-	@{
-		List<SelectListItem> states = ViewData["States"] as List<SelectListItem>;
-		string vicId = ViewData["VicId"] as string;
-		}
-	@Html.DropDownList("States_SelectedList", states)
+<div class="row col-md-3">
+    @{
+        List<SelectListItem> states = ViewData["States"] as List<SelectListItem>;
+        string vicId = ViewData["VicId"] as string;
+    }
+    @Html.DropDownList("States_SelectedList", states)
+</div>
+<div class="row col-md-3">
+    Show all data
+    @Html.CheckBox("Data_ShowingAllData", (bool)ViewBag.ShowAllData)
 </div>
 <div class="col-md-3"></div>
-<br/><br/>
+<br />
+<br />
 <div id="reportPartial">
-	@Html.Partial("ReportGrid", Model)
+    @Html.Partial("ReportGrid", Model)
 </div>

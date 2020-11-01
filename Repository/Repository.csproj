@@ -61,6 +61,7 @@
     <Compile Include="ImportData\Extensions\MathExtentions.cs" />
     <Compile Include="ImportData\SeedingAdapter.cs" />
     <Compile Include="ImportData\SeedingContext.cs" />
+    <Compile Include="ImportData\SeedingData\DataImportException.cs" />
     <Compile Include="ImportData\SeedingData\IScoreImportStrategy.cs" />
     <Compile Include="ImportData\SeedingData\ScoreDetailImportStrategy.cs" />
     <Compile Include="ImportData\SeedingData\ScoreImportStrategy.cs" />

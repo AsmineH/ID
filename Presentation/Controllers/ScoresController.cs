@@ -8,7 +8,7 @@ using System.Web.Mvc;
 
 namespace Presentation.Controllers
 {
-	public class ScoresController : Controller
+	public class ScoresController : BaseController
 	{
 		private ReportService service = new ReportService();
 
@@ -22,13 +22,16 @@ namespace Presentation.Controllers
 				Selected = (p.StateName.Equals("Victoria", StringComparison.CurrentCultureIgnoreCase))
 			})
 			.ToList();
+            ViewBag.ShowAllData = ShowAllData;
 
-			return View(service.GetAllData(null));
+			return View(service.GetAllData(null, ShowAllData));
 		}
-		public ActionResult DataGrid(string stateId)
+		public ActionResult DataGrid(string stateId, bool showAllData = false)
 		{
-			int id = stateId != null ? int.Parse(stateId) : -1;
-			return PartialView(service.GetAllData(id));
+            ShowAllData = showAllData;
+            ViewBag.ShowAllData = ShowAllData;
+            int id = stateId != null ? int.Parse(stateId) : -1;
+            return PartialView(service.GetAllData(id, ShowAllData));
 		}
 	}
 }

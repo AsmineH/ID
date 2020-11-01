@@ -6,6 +6,11 @@
 			$("#Data_SelectedList").change(function (e) {
 				var val = $(this).val();
 				$("#dataPartial").load("/Scores/DataGrid?stateId=" + val);
+            });
+            $("#Data_ShowingAllData").change(function (e) {
+				var state = $("#Data_SelectedList").val();
+				var val = $(this)[0].checked;
+				$("#dataPartial").load("/Scores/DataGrid?stateId=" + state + "&showAllData=" + val);
 			});
 		});
 	</script>
@@ -16,11 +21,15 @@
 
 <h2>All data by state</h2>
 <div class="col-md-3"></div>
-<div class="row col-md-6">
+<div class="row col-md-3">
 	@{
 		List<SelectListItem> states = ViewData["States"] as List<SelectListItem>;
 	}
 	@Html.DropDownList("Data_SelectedList", states)
+</div>
+<div class="row col-md-3">
+    Show all data
+    @Html.CheckBox("Data_ShowingAllData", (bool)ViewBag.ShowAllData)
 </div>
 <div class="col-md-3"></div>
 <br /><br />
